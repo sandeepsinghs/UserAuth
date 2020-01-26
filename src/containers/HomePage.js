@@ -6,6 +6,8 @@ import {
     View,
     FlatList,
     Dimensions,
+    BackHandler,
+    Alert,
     TouchableOpacity
 } from 'react-native';
 import { homeStyle } from '../components/ContainerStyles';
@@ -24,6 +26,25 @@ class HomePage extends Component {
 
     componentDidMount() {
         this.props.getUserDetails();
+        BackHandler.addEventListener('hardwareBackPress', this.onBackPress)
+    }
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.onBackPress)
+    }
+    onBackPress = () => {
+        Alert.alert(null,
+            " Do you want to exit?",
+            [
+                { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+                {
+                    text: 'OK', onPress: () => {
+                        BackHandler.removeEventListener()
+                        BackHandler.exitApp()
+                    }
+                },
+            ]);
+
+        return true
     }
 
     renderItem(data) {

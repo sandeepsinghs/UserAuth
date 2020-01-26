@@ -6,14 +6,14 @@ import {
     View,
     BackHandler,
     ActivityIndicator,
+    ToastAndroid,
     TouchableOpacity
 } from 'react-native';
 import { loginStyle } from '../components/ContainerStyles';
 import { Card, } from 'native-base';
 import UserData from '../components/UserData';
 import { loginUser } from '../Actions/LoginActions'
-import { connect } from 'react-redux'
-
+import { connect } from 'react-redux';
 
 class LoginPage extends Component {
     constructor(props) {
@@ -46,11 +46,21 @@ class LoginPage extends Component {
         } else {
             this.props.loginUser(username, password);
             console.log(" user name " + username + " and password " + password + " and isValid user " + this.props.isValidUser);
-            if (this.props.isValidUser) {
+            if ((username == UserData.UserLogin.username) && (password == UserData.UserLogin.password)) {
                 this.props.navigation.navigate('HomePage');
+                ToastAndroid.showWithGravity(
+                    'Login Sucessful',
+                    ToastAndroid.SHORT,
+                    ToastAndroid.BOTTOM,
+                );
+            } else {
+                ToastAndroid.showWithGravity(
+                    'User name and passwod is not valid. Try again',
+                    ToastAndroid.SHORT,
+                    ToastAndroid.BOTTOM,
+                );
             }
         }
-
     }
 
     render() {
